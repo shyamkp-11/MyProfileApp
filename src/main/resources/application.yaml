@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: MyProfileApp
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+application:
+  recaptcha:
+    secret:
+      key: ${RECAPTCHA_SECRET_KEY}
+    site:
+      key: ${RECAPTCHA_SITE_KEY}
