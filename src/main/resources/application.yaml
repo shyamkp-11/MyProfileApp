@@ -9,7 +9,12 @@ spring:
           starttls:
             enable: true
             required: true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 application:
+  mail:
+    from:
+      address: ${MAIL_FROM_ADDRESS}
   recaptcha:
     secret:
       key: ${RECAPTCHA_SECRET_KEY}

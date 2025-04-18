@@ -1,15 +1,17 @@
 package com.shyampatel.myprofileapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shyampatel.myprofileapp.mail.EmailService;
 import com.shyampatel.myprofileapp.message.Message;
 import com.shyampatel.myprofileapp.message.MessageService;
 import com.shyampatel.myprofileapp.model.MessageRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,7 @@ public class MainController {
     private String siteRecaptchaKey;
     private final RestClient restClient;
 
+    @Autowired
     MainController(MessageService messageService, EmailService emailService) {
         this.restClient = RestClient.create("https://www.google.com/recaptcha/api/siteverify");
         this.messageService = messageService;
@@ -79,7 +82,7 @@ public class MainController {
     public String processForm(HttpServletRequest request,
                               Model theModel,
                               @Valid @ModelAttribute("message") MessageRequest messageRequest,
-                              BindingResult bindingResult) throws JSONException {
+                              BindingResult bindingResult) throws JsonProcessingException {
 
         theModel.addAttribute("siteRecaptchaKey", siteRecaptchaKey);
 
@@ -93,10 +96,10 @@ public class MainController {
                 .body(String.class);
 //        System.out.println("token"+ request.getParameter("g-recaptcha-response"));
 //        System.out.println(result);
-        JSONObject recaptchaResult = new JSONObject(result);
-        var isRecaptchaVerified = recaptchaResult.getBoolean("success");
-        var score = recaptchaResult.optDouble("score", Double.MIN_VALUE);
-        System.out.println(" verified " + isRecaptchaVerified + " score: " + score);
+        JsonNode recaptchaResult = (new ObjectMapper()).readTree(result);
+        var isRecaptchaVerified = recaptchaResult.get("success").asBoolean();
+        var score = recaptchaResult.get("score").asDouble( Double.MIN_VALUE);
+//        System.out.println(" verified " + isRecaptchaVerified + " score: " + score);
         if (!isRecaptchaVerified || score < 0.5) {
             theModel.addAttribute("recaptchaFail", Boolean.TRUE);
             return "message-form";
