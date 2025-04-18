@@ -161,7 +161,6 @@ option_settings:
 EOL
 # Because if not target directory won't be uploaded to eb instance's docker image
 cat >.ebignore <<EOL
-target/
 src/
 .git/
 EOL
