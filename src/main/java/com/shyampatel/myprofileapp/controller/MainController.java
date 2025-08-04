@@ -46,26 +46,32 @@ public class MainController {
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-    @GetMapping("/home")
-    public String home(HttpServletRequest request, Model theModel) {
-
-        theModel.addAttribute("theDate", java.time.LocalDateTime.now());
-
-        return "helloworld";
+    @GetMapping("/githubplayroomapp")
+    public String redirectToGithubPlayroomAndroidRepo(){
+        return "redirect:https://github.com/shyamkp-11/AndroidPlayroom/tree/main/githubplayroom";
     }
 
-    @GetMapping("/processForm")
-    public String processForm(@RequestParam("visitorName") String name) {
-        return "helloworld";
+    @GetMapping("/thebackendapp")
+    public String redirectToGithubPlayroomBackendApp(){
+        return "redirect:https://github.com/shyamkp-11/The-Backend-Server-Github-Webhooks";
     }
 
-    @RequestMapping(path = "/requestMapping")
-    public String processForm2() {
-        return "helloworld";
+    @GetMapping("/geofenceapp")
+    public String redirectToGeofenceApp(){
+        return "redirect:https://github.com/shyamkp-11/AndroidPlayroom/tree/main/geofenceplayroom";
     }
 
+    @GetMapping("withbluetoothapp")
+    public String redirectToWithBluetoothApp() {
+        return "redirect:https://github.com/shyamkp-11/AndroidPlayroom/tree/main/withbluetooth";
+    }
 
-    @GetMapping("/showMessageForm")
+    @GetMapping("/myprofileapp")
+    public String redirectToMyProfileApp(){
+        return "redirect:https://github.com/shyamkp-11/MyProfileApp";
+    }
+
+    @GetMapping("/")
     public String showForm(Model theModel) {
 
         // create a student object
@@ -75,7 +81,7 @@ public class MainController {
         theModel.addAttribute("message", theMessageRequest);
         theModel.addAttribute("siteRecaptchaKey", siteRecaptchaKey);
 
-        return "message-form";
+        return "index";
     }
 
     @PostMapping("/processMessageForm")
@@ -98,21 +104,27 @@ public class MainController {
 //        System.out.println(result);
         JsonNode recaptchaResult = (new ObjectMapper()).readTree(result);
         var isRecaptchaVerified = recaptchaResult.get("success").asBoolean();
-        var score = recaptchaResult.get("score").asDouble( Double.MIN_VALUE);
+//        JsonNode scoreValue = recaptchaResult.get("score");
+//        double score = Double.MIN_VALUE;
+//        if(scoreValue != null)
+//        {
+//            score = scoreValue.asDouble(Double.MIN_VALUE);
+//        }
 //        System.out.println(" verified " + isRecaptchaVerified + " score: " + score);
-        if (!isRecaptchaVerified || score < 0.5) {
+        if (!isRecaptchaVerified) {
             theModel.addAttribute("recaptchaFail", Boolean.TRUE);
-            return "message-form";
+            return "index";
         }
         if (bindingResult.hasErrors()) {
-            return "message-form";
+            return "index";
         } else {
 //            System.out.println("theMessage: " + messageRequest.toString());
-            var messageToSave = new Message();
-            messageToSave.setMessage(messageRequest.getMessage());
-            messageToSave.setSubject(messageRequest.getSubject());
-            messageToSave.setVisitorName(messageRequest.getVisitorName());
-            messageToSave.setVisitorEmail(messageRequest.getVisitorEmail());
+            var messageToSave = Message.builder()
+                    .setMessage(messageRequest.getMessage())
+                    .setSubject(messageRequest.getSubject())
+                    .setVisitorName(messageRequest.getVisitorName())
+                    .setVisitorEmail(messageRequest.getVisitorEmail())
+                    .build();
             messageService.save(messageToSave);
             emailService.sendEmail(
                     "shyamkpatel@hotmail.com",
@@ -120,8 +132,8 @@ public class MainController {
                     "From:" + messageToSave.getVisitorEmail() + "\n" +
                             messageToSave.getMessage()
             );
-
-            return "message-confirmation";
+            theModel.addAttribute("messageSent", Boolean.TRUE);
+            return "index";
         }
     }
 

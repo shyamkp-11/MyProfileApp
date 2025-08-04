@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Personal Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+<div class="fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span>d</span><span>e</span><span>v</span>.<span>W</span>.<span>S</span><span>h</span><span>y</span><span>a</span><span>m</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#work">Work History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <th:block th:if="${messageSent}==true">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Message sent!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </th:block>
+    <th:block th:if="${recaptchaFail}==true">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Message send failed due to unsatisfied reCAPTCHA!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </th:block>
+</div>
+<header class="hero">
+    <div class=".hero-background"></div>
+    <!--    <img src="/static/images/background.png" alt="hero background image" class="hero-background"/>-->
+    <div>
+        <img src="/images/profile_pic.jpg" alt="Profile Picture" class="profile-img mb-3">
+        <h1>Hi, I'm Shyam Patel</h1>
+        <p class="lead">Android | Web | Cloud Developer</p>
+        <p>
+            <a href="https://www.linkedin.com/in/patel-shyam">
+                <!--            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" fill="white"-->
+                <!--                 viewBox="0 0 36 36">-->
+                <!--                <rect x="4" y="4" width="80%" height="80%"></rect>-->
+                <!--                <image id="linkedin" width="100%" height="100%"-->
+                <!--                       xlink:href="/images/ln-icon.png"/>-->
+                <!--            </svg>-->
+                <img class="social-icon" id="linkedin"
+                     src="../images/ln-img.png"
+                     style="height:38px;width:auto;display:inline;"
+                     alt="Linkedin icon"
+                />
+            </a>
+            <a href="https://github.com/shyamkp-11">
+                <img class="social-icon" id="github"
+                     src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+                     style="height:34px;width:auto;display:inline;border-radius:50%;border: 5px solid #000000;"
+                     alt="Github icon"
+                />
+            </a></p>
+    </div>
+</header>
+<section id="about" class="container py-5">
+    <h2>About Me</h2>
+    <div id="aboutContent">
+        <p>I am an experienced Android Developer with a track record of turning ideas into polished, user-centric mobile apps
+            and a solid foundation in Computer Science. In addition to my expertise in
+            Android development, I have hands-on experience in web development and cloud, enabling me to create robust, end-to-end
+            solutions.<br>
+            After a refreshing career break 🏝️, I’m ready to bring fresh energy, creativity, and a customer-focused
+            mindset to a dynamic team ✨.
+            <br><br>
+            Beyond technical skills, I have strong people skills gained from working in fast-paced customer service
+            roles, enabling me to communicate clearly, collaborate effectively, and keep user satisfaction at the heart
+            of everything I build 🙂.
+        </p>
+    </div>
+    <!--<a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#aboutContent-collapse" role="button"
+       aria-expanded="false"
+       aria-controls="aboutContent-collapse">Read More</a>-->
+</section>
+
+<section id="skills" class="bg-light py-5">
+    <div class="container">
+        <h2>My Skills</h2>
+        <div id="skillsContent">
+            <div class="row">
+                <div class="col-md-4"><h5>Android</h5>
+                    <p>Jetpack Compose,
+                        Koin, Dagger2, Coroutines, Room,
+                        Retrofit, DataBinding, Material
+                        Design, Google Apis, Bluetooth Apis (BLE)
+                        Apollo GraphQL for Android, Firebase Messaging, Junit, Integration testing, Compose Testing,
+                        UiAutomator Testing, Mockito, Mockk
+                    </p></div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <h5>Web</h5>
+                        <p> Spring Boot, Spring MVC, Spring Security, Spring Security, Spring JPA, Spring Testing, JEE
+                            (JSP,
+                            Servlets), jQuery, HTML, CSS, bootstrap,
+                            javascript</p>
+                    </div>
+                    <div class="row">
+                        <h5>Versioning, CI / CD</h5>
+                        <p>Git, Github, Jenkins, Docker</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <h5>Programming Languages</h5>
+                        <p>Kotlin
+                            (Advanced), Java (Advanced),
+                            Python (Basic)</p>
+                    </div>
+                    <div class="row">
+                        <h5>Cloud</h5>
+                        <p>AWS - EC2, S3, EBS, SQS, DynamoDB, RDS, SES, VPC, Route53, Lamda</p>
+                    </div>
+                </div>
+            </div>
+            <div id="skillsContent-collapse" class="collapse">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <h5>Database</h5>
+                            <p>SQLite (w RoomDB), MySQL, DynamoDB</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <h5>Tools</h5>
+                            <p>Android Studio, IntelliJ, Jira,
+                                Slack, Asana, LucidChart, Visio, Jenkins, AWS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#skillsContent-collapse"
+               role="button" aria-expanded="false"
+               aria-controls="skillsContent-collapse">More skills</a>
+        </div>
+    </div>
+</section>
+
+<section id="work" class="container py-5">
+    <h2>Work History</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h5>Competency Reestablish projects</h5>
+            <p>May 2024 - Present</p>
+            <div>
+                TODO Add a description
+                <ol>
+                    <li><h6><a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/githubplayroom">GitHub
+                        Playroom</a></h6>
+                        <ul>
+                            <li>App that allows user to interact with their GitHub Account.</li>
+                            <li>User can search, view (public/private repositories), star (⭐)️ a repository.</li>
+                            <li>User can opt to receive push notification when a GitHub user stars their owned
+                                repository
+                            </li>
+                            <li>Project also implements unit testing with junit, integration tests with compose test,
+                                navigation component automated tests, and end-to-end test with UIAutomator
+                            </li>
+                            <li>Uses: <i>Jetpack Compose (views, theming, animation, navigation), Koin, Kotlin
+                                coroutines,
+                                Jetpack Room, Firebase Messaging, ViewModels, Chrome Custom Tabs to authenticate user
+                                with
+                                OAuth2, Apollo Graphql, Retrofit build with clean architecture design.</i>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <div id="competency-projects-collapse" class="collapse">
+                        <li><h6><a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/geofenceplayroom">The
+                            Geofence App</a></h6></li>
+                        <ul>
+                            <li>App showcases geofencing functionality on Android</li>
+                            <li>User can pin location on map (Google Maps Compose) to initiate geofence</li>
+                            <li>User can drag the radius marker to adjust the distance of the geofence</li>
+                            <li>User can view, deactivate, reactivate and delete their created geofence by interacting
+                                with list showing their saved fences with their thumbnails
+                            </li>
+                            <li>For each geofence user can view the logs of their triggered time of entry and exit</li>
+                            <li>Uses: <i>Jetpack Compose (views, theming, navigation), Google Maps Compose
+                                Library, BroadcastReceivers, Koin and kotlin Coroutines</i>
+                            </li>
+                        </ul>
+                        <li><h6><a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/withbluetooth">WithBluetooth
+                            App</a></h6></li>
+                        <ul>
+                            <li>App explores android BLE API by allowing it to connect to Bluetooth GATT Server on
+                                Raspberry Pi transmitting live cpu temperature.
+                            </li>
+                            <li>User can request current value of pi cpu temperature can be requested in Fahrenheit or
+                                Celsius by altering temperature unit characteristic.
+                            </li>
+                            <li>User can enable notify functionality which set pi to continuously notify any changes in
+                                its temperature without need for an explicit request while is app is open.
+                            </li>
+                            <li>User can activate foreground service option which will provide live updates of pi cpu
+                                temperature even if the app is closed.
+                            </li>
+                            <li>Users: <i>Android bluetooth library along with Jetpack Compose, Foreground Services,
+                                device pairing using ConnectionDeviceManager, Koin and Jetpack Navigation</i></li>
+                        </ul>
+                        <li><h6><a href="https://github.com/shyamkp-11/The-Backend-Server-Github-Webhooks">The Backend
+                            App / GitHub Webhooks</a></h6></li>
+                        <ul>
+                            <li>Implemented Java backend server using Spring boot framework</li>
+                            <li>Uses JWT authentication and Spring Boot Security to secure endpoints</li>
+                            <li>Exposes various REST endpoints where the client app the notify user login / logout on
+                                app with FCM tokens and device ids
+                            </li>
+                            <li>Implements secured endpoint where GitHub can send webhook notifications which are then
+                                evaluated and routed to appropriate user device to Firebase Messaging
+                            </li>
+                            <li>Implements unit test and integration tests</li>
+                            <li>Uses: <i>
+                                spring-web, spring-security, spring-data-jpa and spring-data-rest, spring-starter-test,
+                                JWT based token authentication to restrict access to secured API endpoint, MySQL
+                                database
+                            </i></li>
+                        </ul>
+                        <li><h6><a href="https://build.devwshyam.com">CI / CD project</a></h6></li>
+                        <ul>
+                            <li>Built jenkins CI/CD pipelines for all Android and Spring projects.</li>
+                            <li>Setup Amazon EBS along with Docker to run spring projects</li>
+                            <li><s>Upload deploy artifacts to GitHub</s></li>
+                            <li>Setup <a href="https://github.com/shyamkp-11/My-Proxy-Server">ngnix reverse proxy
+                                server</a> as <i>https forwarding server</i> for all the web application endpoints
+                            </li>
+                        </ul>
+
+                        <li><h6><a href="https://github.com/shyamkp-11/MyProfileApp">dev.W.Shyam</a></h6></li>
+                        <ul>
+                            <li>Implement webapp to showcase my personal profile.</li>
+                            <li>Uses recaptcha v3 to enforce bots protection on forms in the webapp</li>
+                            <li>Setup SMTP server using AWS SES and Lamda to manage emails from the webapp domain.</li>
+                            <li>Uses spring framework with java, html, css and js</li>
+                        </ul>
+                    </div>
+                    <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse"
+                       href="#competency-projects-collapse" role="button" aria-expanded="false"
+                       aria-controls="competency-projects-collapse">5+ More!</a>
+                </ol>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <h5>Frontend associate - Walmart Naperville</h5>
+            <p>Oct 2023 - Present</p>
+            <div>
+                - Worked as a Self Checkout attendant and in Customer service to assist customer with purchases,
+                questions.<br>
+                - Helped in various tasks not limited to handling cash, processing claims, fixing broken stuffs,
+                stocking,
+                operating cart pusher, cleaning, zoning and much more.<br>
+                - Developed strong communication skills, including active listening, clear verbal and written
+                communication,
+                and conflict resolution, to effectively address customer needs and concerns.<br>
+                - Contributed to a positive work environment by maintaining a professional and courteous demeanor also
+                during
+                stressful times, fostering strong interpersonal skills.
+            </div>
+        </li>
+        <li class="list-group-item">
+            <h5>Android Developer - <a href="https://www.linkedin.com/company/cellpointdigital/">Cellpoint Digital</a>
+            </h5>
+            <p>Oct 2018 - Jan 2020</p>
+            <div>
+                - Designed and developed modularized screens for airline travel. Collaborated with cross-functional
+                teams to define, design, and launch new features.<br>
+                - Developed applications using modern software design patterns such as dependency injection and clean
+                architecture, incorporated offline storage, and threading for seamless use.<br>
+                - Implemented script to auto-generate OpenAPI client, wrote unit test with 100% coverage for the
+                business logic -in viewmodels, usecases and repositories.<br>
+                - Implemented multiple custom views to fulfill dynamic theming requirements and speed up
+                development.<br>
+                - Developed and maintained new and existing features for the Philippine Airlines Android app.
+            </div>
+        </li>
+    </ul>
+    <h4 class="pt-3">Projects</h4>
+    <div id="workContent-collapse" class="collapse">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h5>Animoto clone</h5>
+                <p>Feb 2016 - Apr 2016</p>
+                <p>Implemented a simple distributed task execution framework (similar to <a
+                        href="http://datasys.cs.iit.edu/publications/2014_CCGrid14_CloudKon.pdf">CloudKon CCGrid 2014
+                    Paper</a>) on Amazon EC2 using the SQS and DynamoDB.
+                    <br>
+                    This was extended to generate a 60 sec video clip and store it on S3. It was implemented in java
+                    using Amazon's EC2, SQS, DynamoDB and S3 web services.</p>
+            </li>
+            <li class="list-group-item">
+                <h5>P2P file sharing system</h5>
+                <p>Feb 2017 - Apr 2017</p>
+                <p>
+                    As a part of Graduate level course Advanced Operating System assignments following was implemented.
+                    <br>
+                    - A Napster style File sharing system with centralized indexing server.<br>
+                    - A pure distributed p2p file sharing system with bus and start topology.<br>
+                    - Add consistency mechanism to keep track of file changes using push and pull approaches.<br>
+                </p>
+            </li>
+        </ul>
+        <a href="https://www.linkedin.com/in/patel-shyam/details/projects/">More!</a>
+    </div>
+    <a class="btn btn-outline-primary btn-sm mt-3" data-bs-toggle="collapse" href="#workContent-collapse" role="button"
+       aria-expanded="false"
+       aria-controls="workContent-collapse">Show More</a>
+</section>
+
+<section id="education" class="bg-light py-5">
+    <div class="container">
+        <h2>Education</h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h5>Master of Science (M.S.) in Computer Science</h5>
+                <p>Illinois Institute of Technology, Chicago : 2015 - 2017</p>
+            </li>
+            <li class="list-group-item">
+                <h5>Bachelor of Engineering (B.E.) in Computer Engineering</h5>
+                <p>L.D. College of Engineering, Ahmedabad, Gujarat, India : 2010 - 2014</p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section id="contact" class="container py-5">
+    <h2>Contact Me</h2>
+    <form id="form-message" th:action="@{/processMessageForm}" th:object="${message}" method="POST"
+          class="needs-validation">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input type="text" class="form-control" required minlength="2"
+                   id="inputName" placeholder="Your Name" th:field="*{visitorName}">
+            <span th:if="${#fields.hasErrors('visitorName')}"
+                  th:errors="*{visitorName}" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email" class="form-control"
+                   id="inputEmail" placeholder="Your Email" th:field="*{visitorEmail}" required>
+            <div th:if="${#fields.hasErrors('visitorEmail')}"
+                 th:errors="*{visitorEmail}" class="text-danger"></div>
+        </div>
+        <div class="mb-3">
+            <label for="inputMessage" class="form-label">Message</label>
+            <textarea class="form-control"
+                      id="inputMessage" rows="5"
+                      placeholder="Your Message" th:field="${message.message}" required maxlength="300"></textarea>
+            <span th:if="${#fields.hasErrors('message')}"
+                  th:errors="${message.message}" class="text-danger"></span>
+        </div>
+        <div class="g-recaptcha" th:attr="data-sitekey=${siteRecaptchaKey}"></div>
+        <br/>
+        <button type="submit" class="btn btn-primary" id="sendMessageButton">Send Message</button>
+    </form>
+</section>
+
+<footer class="text-center">
+    <div>
+        © 2025 Shyam Patel &nbsp;|&nbsp;&nbsp;
+        <a href="https://github.com/shyamkp-11" target="_blank" class="me-3">GitHub</a>|&nbsp;
+        <a href="https://linkedin.com/in/patel-shyam" target="_blank" class="me-3">LinkedIn</a>|&nbsp;
+        <a href="mailto:me@devwshyam.com">Email</a>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // JavaScript: Smooth scroll for nav links
+    document.querySelectorAll('a.nav-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
+        });
+    });
+</script>
+</body>
+</html>

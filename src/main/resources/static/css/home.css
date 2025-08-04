@@ -1,0 +1,225 @@
+
+:root {
+    --highlight: #95daf8;
+    --heading-color: #051fc6
+}
+
+.navbar-brand:hover {
+    color: var(--highlight);
+}
+
+.navbar-brand span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover span {
+    animation: riseUp 0.6s forwards;
+    color: var(--highlight);
+}
+
+.navbar-brand span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.navbar-brand span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.navbar-brand span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.navbar-brand span:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.navbar-brand span:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.navbar-brand span:nth-child(6) {
+    animation-delay: 0.5s;
+}
+
+.navbar-brand span:nth-child(7) {
+    animation-delay: 0.6s;
+}
+
+.navbar-brand span:nth-child(8) {
+    animation-delay: 0.7s;
+}
+
+.navbar-brand span:nth-child(9) {
+    animation-delay: 0.8s;
+}
+
+@keyframes riseUp {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--highlight);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: right;
+}
+
+.navbar-nav .nav-link:hover {
+    transform: translateY(-4px);
+}
+
+.navbar-nav .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+body {
+    padding-top: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*background: linear-gradient(to bottom right, #f0f4f8, #d9e2ec) fixed;*/
+    background: linear-gradient(-70deg, #95daf8 0%, #edf4ff 80%)
+}
+
+h2, h4 {
+    color: var(--heading-color);
+}
+
+.profile-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    place-content: center;
+    transition: transform 0.4s ease;
+}
+
+.profile-img:hover {
+    transform: scale(1.16);
+}
+
+.social-icon:hover {
+    transform: scale(1.16);
+}
+.social-icon {
+    transition: transform 0.2s ease;
+}
+
+.hero {
+    text-align: center;
+    height: 650px;
+    /*padding: 150px 0;*/
+}
+.hero div.\.hero-background {
+    /*background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1200x400') no-repeat center center;*/
+    background: url("../images/background_1.jpeg");
+    background-position: 0 0px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    z-index: -1;
+    height: 650px;
+    width: 100%;
+    filter: brightness(80%) saturate(120%);
+    /*left: 0;*/
+    /*top: -0px;*/
+    /*color: #fff;*/
+    /*object-fit: cover;*/
+    position: absolute;
+}
+
+
+.hero div {
+    padding-top: 150px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    animation: fadeInDown 1s ease forwards;
+    color: #ffffff;
+}
+
+.hero p {
+    animation: fadeInUp 1s ease forwards;
+    color: #ffffff;
+}
+
+
+#work a{
+    text-decoration: none;
+}
+
+#work a:hover{
+    text-decoration: underline;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    padding: 20px 0;
+}
+
+footer div a {
+    color: #fff;
+    text-decoration: none;
+    padding-right: 0;
+    margin-right: 0;
+
+}
+
+footer div a:hover {
+    color: var(--highlight);
+    text-decoration: underline;
+}
+
+.collapse {
+    transition: height 0.5s ease, opacity 0.5s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*html {*/
+/*    scroll-behavior: smooth;*/
+/*}*/
