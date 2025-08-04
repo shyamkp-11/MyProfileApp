@@ -1,4 +1,5 @@
 FROM amazoncorretto:21
-COPY target/MyProfileApp.jar /home/
+RUN yum update -y && yum install unzip -y
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/home/MyProfileApp.jar"]
+COPY --chmod=0755 entrypoint.sh /home/
+ENTRYPOINT ["sh", "/home/entrypoint.sh"]

@@ -18,6 +18,10 @@ pipeline {
                     env.WEBAPP_DATASOURCE_URL = props.WEBAPP_DATASOURCE_URL
                     env.WEBAPP_DATASOURCE_USERNAME = props.WEBAPP_DATASOURCE_USERNAME
                     env.WEBAPP_DATASOURCE_PASSWORD = props.WEBAPP_DATASOURCE_PASSWORD
+                    env.AWS_ACCESS_KEY_ID_ENV = props.AWS_ACCESS_KEY_ID_ENV
+                    env.AWS_ACCESS_KEY_ENV = props.AWS_ACCESS_KEY_ENV
+                    env.AWS_DEFAULT_REGION_ENV = props.AWS_DEFAULT_REGION_ENV
+                    env.S3_WAR_PATH = props.S3_WAR_PATH
                     env.DEPLOY_LOCALLY = false
                 }
             }
@@ -124,6 +128,18 @@ echo Testing
             steps {
                 // todo change hard coded name
                 sh '''
+#copy JAR file to s3
+file_name=$(find target -type f -name "*jar")
+aws s3 cp $file_name $S3_WAR_PATH/
+cat >entrypoint.sh <<EOL
+#install awscli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o \
+"awscliv2.zip" && unzip awscliv2.zip && ./aws/install && rm awscliv2.zip
+printf "$AWS_ACCESS_KEY_ID_ENV\n$AWS_ACCESS_KEY_ENV\n$AWS_DEFAULT_REGION_ENV\njson\n" | aws configure
+# run jar
+aws s3 cp $S3_WAR_PATH/MyProfileApp.jar /home/ --quiet
+java -jar /home/MyProfileApp.jar
+EOL
 mkdir -p .ebextensions
 cat >.ebextensions/environment.config <<EOL
 option_settings:
