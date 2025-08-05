@@ -137,7 +137,7 @@ h2, h4 {
     background: url("../images/background_1.jpeg");
     background-position: 0 0px;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: local;
     background-size: cover;
     z-index: -1;
     height: 650px;
