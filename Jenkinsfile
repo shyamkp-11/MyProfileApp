@@ -1,13 +1,13 @@
 pipeline {
-    agent any
+	agent any
     environment {
-        WEBAPP_CREDENTIALS=credentials('MyProfileApp-secrets');
+		WEBAPP_CREDENTIALS = credentials('MyProfileApp-secrets');
     }
     stages {
-        stage ('Init') {
-            steps {
-                script {
-                    def props = readProperties file: env.WEBAPP_CREDENTIALS
+		stage ('Init') {
+			steps {
+				script {
+					def props = readProperties file: env.WEBAPP_CREDENTIALS
                     env.SPRING_MAIL_HOST = props.SPRING_MAIL_HOST
                     env.SPRING_MAIL_PASSWORD = props.SPRING_MAIL_PASSWORD
                     env.SPRING_MAIL_PORT = props.SPRING_MAIL_PORT
@@ -23,44 +23,83 @@ pipeline {
                     env.AWS_DEFAULT_REGION_ENV = props.AWS_DEFAULT_REGION_ENV
                     env.S3_WAR_PATH = props.S3_WAR_PATH
                     env.DEPLOY_LOCALLY = false
+                    //env.GITHUB_PAT = credentials('GithubPAT')
+                    env.GITHUB_TOKEN = props.GITHUB_PAT
                 }
             }
         }
         stage('Docker') {
-            when {
-                expression {
-                    return false
+			when {
+				expression {
+					return false
                 }
             }
             steps {
-                sh '''
+				sh '''
 docker build --tag shyamkp4/my-profile-app .
 mkdir -p .m2
                 '''
             }
         }
         stage('Build project') {
-            agent {
-                docker {
-                    image 'maven:3.9.9-amazoncorretto-21'
-                    reuseNode true
-                }
+			agent {
+				dockerfile {
+					dir 'docker'
+					//args '-e GITHUB_TOKEN=${env.GITHUB_TOKEN}'
+					reuseNode true
+				}
             }
             steps {
-                sh '''
+				sh '''
 mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
                 '''
             }
         }
-        stage ('Build dockerImage') {
-            when {
-                beforeAgent true;
-                expression {
-                    return env.DEPLOY_LOCALLY.toBoolean() == true;
+        stage('Upload Github release') {
+			agent {
+				dockerfile {
+					dir 'docker'
+					//args '-e GITHUB_TOKEN=${env.GITHUB_TOKEN}'
+					reuseNode true
+				}
+			}
+			when {
+				beforeAgent true;
+				expression {
+					def scriptOutput = sh(returnStdout: true, script: '''
+                    #!/bin/bash
+                    commit1=$(git rev-list -1 $(git describe --tags --abbrev=0));
+                    commit2=$(git rev-parse HEAD);
+                    if [ "$commit1" = "$commit2" ]; then
+                        echo "true"
+                    else
+                        echo "false"
+                    fi''').trim()
+                    echo "$scriptOutput"
+                    return scriptOutput == "true"
                 }
             }
             steps {
-                echo "Building docker image"
+				script {
+					def tagName = sh(returnStdout: true, script:'git describe --tags --abbrev=0').trim()
+                    def commitish = sh(returnStdout: true, script:'git rev-parse HEAD').trim()
+					echo "$tagName"
+                    sh """
+#echo $GITHUB_TOKEN
+gh release create ${tagName} target/MyProfileApp.jar
+                    """
+                }
+            }
+        }
+        stage ('Build dockerImage') {
+			when {
+				beforeAgent true;
+                expression {
+					return env.DEPLOY_LOCALLY.toBoolean() == true;
+                }
+            }
+            steps {
+				echo "Building docker image"
                 sh '''
 ls -lrt
 docker image build -t deployed_my_profile_app:$BUILD_NUMBER .
@@ -69,18 +108,18 @@ docker images
             }
         }
         stage('Deploy locally') {
-            when {
-                beforeAgent true;
+			when {
+				beforeAgent true;
                 expression {
-                    return env.DEPLOY_LOCALLY.toBoolean() == true;
+					return env.DEPLOY_LOCALLY.toBoolean() == true;
                 }
             }
             steps {
-                echo "Running locally"
+				echo "Running locally"
                 script {
-                def inspectExitCode = sh script: "docker container inspect deployed_my_profile_app", returnStatus: true
+					def inspectExitCode = sh script: "docker container inspect deployed_my_profile_app", returnStatus: true
                 if (inspectExitCode == 0) {
-                    // remove container if exist
+						// remove container if exist
                     sh "docker stop deployed_my_profile_app"
                     sh "docker rm deployed_my_profile_app"
                     }
@@ -102,35 +141,35 @@ deployed_my_profile_app:$BUILD_NUMBER'''
             }
         }
         stage('Test') {
-            steps {
-                sh '''
+			steps {
+				sh '''
 echo Testing
                 '''
             }
         }
         stage('Archive Artifacts') {
-            when {
-                expression {
-                    return false
+			when {
+				expression {
+					return false
                 }
             }
             steps {
-                archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: false, fingerprint: true, onlyIfSuccessful: true
+				archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: false, fingerprint: true, onlyIfSuccessful: true
             }
         }
         stage('Deploy') {
-            when {
-                 beforeAgent true;
+			when {
+				beforeAgent true;
                  expression {
-                     return env.DEPLOY_LOCALLY.toBoolean() == false;
+					return env.DEPLOY_LOCALLY.toBoolean() == false;
                  }
             }
             steps {
-                // todo change hard coded name
+				// todo change hard coded name
                 sh '''
 #copy JAR file to s3
 file_name=$(find target -type f -name "*jar")
-aws s3 cp $file_name $S3_WAR_PATH/
+aws s3 cp $file_name $S3_WAR_PATH/ --quiet
 cat >entrypoint.sh <<EOL
 #install awscli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o \
@@ -192,8 +231,8 @@ fi
         }
     }
     post {
-        success {
-            sh '''
+		success {
+			sh '''
 echo post on Success
 
 '''
