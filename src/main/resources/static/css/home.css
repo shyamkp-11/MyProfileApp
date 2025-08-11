@@ -135,7 +135,7 @@ h2, h4 {
 .hero div.\.hero-background {
     /*background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1200x400') no-repeat center center;*/
     background: url("../images/background_1.jpeg");
-    background-position: 0 0px;
+    background-position: 0 -50px;
     background-repeat: no-repeat;
     background-attachment: local;
     background-size: cover;

@@ -83,11 +83,17 @@ mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
 				script {
 					def tagName = sh(returnStdout: true, script:'git describe --tags --abbrev=0').trim()
                     def commitish = sh(returnStdout: true, script:'git rev-parse HEAD').trim()
-					echo "$tagName"
                     sh """
 #echo $GITHUB_TOKEN
-gh release create ${tagName} target/MyProfileApp.jar
-                    """
+# Check if the release already exists
+if gh release view "${tagName}" &>/dev/null; then
+    echo "Release ${tagName} already exists. Skipping creation."
+else
+    # Create the release if it does not exist
+    echo "Creating release ${tagName}..."
+    gh release create ${tagName} target/MyProfileApp.jar
+fi
+"""
                 }
             }
         }
