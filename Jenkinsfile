@@ -31,20 +31,21 @@ pipeline {
         stage('Docker') {
 			when {
 				expression {
-					return false
+					return true
                 }
             }
             steps {
 				sh '''
-docker build --tag shyamkp4/my-profile-app .
-mkdir -p .m2
+docker build --tag shyamkp4/upload-github-release -f docker/Dockerfile .
+#docker build --tag shyamkp4/my-profile-app .
+#mkdir -p .m2
                 '''
             }
         }
         stage('Build project') {
 			agent {
-				dockerfile {
-					dir 'docker'
+				docker {
+					image 'shyamkp4/upload-github-release'
 					//args '-e GITHUB_TOKEN=${env.GITHUB_TOKEN}'
 					reuseNode true
 				}
@@ -57,8 +58,8 @@ mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
         }
         stage('Upload Github release') {
 			agent {
-				dockerfile {
-					dir 'docker'
+				docker {
+					image 'shyamkp4/upload-github-release'
 					//args '-e GITHUB_TOKEN=${env.GITHUB_TOKEN}'
 					reuseNode true
 				}

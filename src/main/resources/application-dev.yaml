@@ -3,3 +3,5 @@ spring:
     hibernate:
 #            comment when not in dev mode
       ddl-auto: create
+server:
+  port: 8090
