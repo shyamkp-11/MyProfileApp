@@ -7,6 +7,8 @@ import com.shyampatel.myprofileapp.mail.EmailService;
 import com.shyampatel.myprofileapp.message.Message;
 import com.shyampatel.myprofileapp.message.MessageService;
 import com.shyampatel.myprofileapp.model.MessageRequest;
+import com.shyampatel.myprofileapp.visitor.Visit;
+import com.shyampatel.myprofileapp.visitor.VisitService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+
 @Controller
 public class MainController {
 
     private final MessageService messageService;
+    private final VisitService visitService;
     private final EmailService emailService;
     @Value("${application.recaptcha.secret.key}")
     private String secretRecaptchaKey;
@@ -31,7 +38,8 @@ public class MainController {
     private final RestClient restClient;
 
     @Autowired
-    MainController(MessageService messageService, EmailService emailService) {
+    MainController(MessageService messageService, VisitService visitService, EmailService emailService) {
+        this.visitService = visitService;
         this.restClient = RestClient.create("https://www.google.com/recaptcha/api/siteverify");
         this.messageService = messageService;
         this.emailService = emailService;
@@ -47,17 +55,17 @@ public class MainController {
     }
 
     @GetMapping("/githubplayroomapp")
-    public String redirectToGithubPlayroomAndroidRepo(){
+    public String redirectToGithubPlayroomAndroidRepo() {
         return "redirect:https://github.com/shyamkp-11/AndroidPlayroom/tree/main/githubplayroom";
     }
 
     @GetMapping("/thebackendapp")
-    public String redirectToGithubPlayroomBackendApp(){
+    public String redirectToGithubPlayroomBackendApp() {
         return "redirect:https://github.com/shyamkp-11/The-Backend-Server-Github-Webhooks";
     }
 
     @GetMapping("/geofenceapp")
-    public String redirectToGeofenceApp(){
+    public String redirectToGeofenceApp() {
         return "redirect:https://github.com/shyamkp-11/AndroidPlayroom/tree/main/geofenceplayroom";
     }
 
@@ -67,12 +75,12 @@ public class MainController {
     }
 
     @GetMapping("/myprofileapp")
-    public String redirectToMyProfileApp(){
+    public String redirectToMyProfileApp() {
         return "redirect:https://github.com/shyamkp-11/MyProfileApp";
     }
 
     @GetMapping("/")
-    public String showForm(Model theModel) {
+    public String showForm(Model theModel, HttpServletRequest request) {
 
         // create a student object
         MessageRequest theMessageRequest = new MessageRequest();
@@ -81,6 +89,15 @@ public class MainController {
         theModel.addAttribute("message", theMessageRequest);
         theModel.addAttribute("siteRecaptchaKey", siteRecaptchaKey);
 
+        String visitorAddress;
+        if (request.getHeader("X-FORWARDED-FOR") == null) visitorAddress = request.getRemoteAddr();
+        else visitorAddress = request.getHeader("X-FORWARDED-FOR");
+        String userAgent = request.getHeader("User-Agent"); // Get User-Agent header
+
+        var visited = visitService.getVisitWithTimeGreaterThan(visitorAddress, Instant.now().minus(5, ChronoUnit.MINUTES));
+        if (visited.isEmpty()) {
+            visitService.save(new Visit.Builder().setVisitTime(Instant.now()).setVisitorAddress(visitorAddress).setUserAgent(userAgent).build());
+        }
         return "index";
     }
 
