@@ -23,6 +23,9 @@ pipeline {
                     env.AWS_DEFAULT_REGION_ENV = props.AWS_DEFAULT_REGION_ENV
                     env.S3_WAR_PATH = props.S3_WAR_PATH
                     env.DEPLOY_LOCALLY = false
+                    env.DOCKER_PAT = props.DOCKER_PAT
+                    env.DOCKER_USERNAME = props.DOCKER_USERNAME
+                    env.SERVER_PORT = 8081
                     //env.GITHUB_PAT = credentials('GithubPAT')
                     env.GITHUB_TOKEN = props.GITHUB_PAT
                 }
@@ -102,15 +105,34 @@ fi
 			when {
 				beforeAgent true;
                 expression {
-					return env.DEPLOY_LOCALLY.toBoolean() == true;
+					return true;
                 }
             }
             steps {
 				echo "Building docker image"
                 sh '''
 ls -lrt
-docker image build -t deployed_my_profile_app:$BUILD_NUMBER .
+cat >entrypoint.sh <<EOL
+java -jar MyProfileApp.jar --spring.datasource.url=$WEBAPP_DATASOURCE_URL --spring.datasource.username=$WEBAPP_DATASOURCE_USERNAME --spring.datasource.password=$WEBAPP_DATASOURCE_PASSWORD --spring.mail.host=$SPRING_MAIL_HOST --spring.mail.password=$SPRING_MAIL_PASSWORD --spring.mail.port=$SPRING_MAIL_PORT --spring.mail.username=$SPRING_MAIL_USERNAME --RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY --RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY --server.port=$SERVER_PORT --MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS
+EOL
+docker image build -t shyamkp4/deployed_my_profile_app:$BUILD_NUMBER -t shyamkp4/deployed_my_profile_app:latest .
 docker images
+                '''
+            }
+        }
+
+        stage('Upload Docker image'){
+            when {
+                beforeAgent true;
+                expression {
+        	        return true;
+                }
+            }
+            steps {
+                echo "Uploading docker image"
+                sh '''
+echo "$DOCKER_PAT" | docker login --username $DOCKER_USERNAME --password-stdin
+docker push shyamkp4/deployed_my_profile_app --all-tags
                 '''
             }
         }
@@ -153,88 +175,6 @@ deployed_my_profile_app:$BUILD_NUMBER'''
 echo Testing
                 '''
             }
-        }
-        stage('Archive Artifacts') {
-			when {
-				expression {
-					return false
-                }
-            }
-            steps {
-				archiveArtifacts artifacts: 'target/*.war', allowEmptyArchive: false, fingerprint: true, onlyIfSuccessful: true
-            }
-        }
-        stage('Deploy') {
-			when {
-				beforeAgent true;
-                 expression {
-					return env.DEPLOY_LOCALLY.toBoolean() == false;
-                 }
-            }
-            steps {
-				// todo change hard coded name
-                sh '''
-#copy JAR file to s3
-file_name=$(find target -type f -name "*jar")
-aws s3 cp $file_name $S3_WAR_PATH/ --quiet
-cat >entrypoint.sh <<EOL
-#install awscli
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o \
-"awscliv2.zip" && unzip awscliv2.zip && ./aws/install && rm awscliv2.zip
-printf "$AWS_ACCESS_KEY_ID_ENV\n$AWS_ACCESS_KEY_ENV\n$AWS_DEFAULT_REGION_ENV\njson\n" | aws configure
-# run jar
-aws s3 cp $S3_WAR_PATH/MyProfileApp.jar /home/ --quiet
-java -jar /home/MyProfileApp.jar
-EOL
-mkdir -p .ebextensions
-cat >.ebextensions/environment.config <<EOL
-option_settings:
-    - namespace: aws:autoscaling:launchconfiguration
-      option_name: SecurityGroups
-      value: sg-074f3dd3d21cab7d9
-    - namespace: aws:elbv2:loadbalancer
-      option_name: SecurityGroups
-      value: sg-074f3dd3d21cab7d9
-    - namespace: aws:elbv2:loadbalancer
-      option_name: ManagedSecurityGroup
-      value: sg-074f3dd3d21cab7d9
-    - option_name: spring.mail.host
-      value: $SPRING_MAIL_HOST
-    - option_name: spring.mail.password
-      value: $SPRING_MAIL_PASSWORD
-    - option_name: spring.mail.port
-      value: $SPRING_MAIL_PORT
-    - option_name: spring.mail.username
-      value: $SPRING_MAIL_USERNAME
-    - option_name: MAIL_FROM_ADDRESS
-      value: $MAIL_FROM_ADDRESS
-    - option_name: RECAPTCHA_SITE_KEY
-      value: $RECAPTCHA_SITE_KEY
-    - option_name: RECAPTCHA_SECRET_KEY
-      value: $RECAPTCHA_SECRET_KEY
-    - option_name: spring.datasource.password
-      value: $WEBAPP_DATASOURCE_PASSWORD
-    - option_name: spring.datasource.username
-      value: $WEBAPP_DATASOURCE_USERNAME
-    - option_name: spring.datasource.url
-      value: $WEBAPP_DATASOURCE_URL
-    - option_name: SERVER_PORT
-      value: 8080
-EOL
-# Because if not target directory won't be uploaded to eb instance's docker image
-cat >.ebignore <<EOL
-src/
-.git/
-EOL
-eb init -p docker -r us-east-2 -k DeployEC2KeyPair MyProfileAppEBS
-if eb status | grep -q " Application name: MyProfileAppEBS"; then
-eb deploy MyProfileAppEBS -l $BUILD_NUMBER
-fi
-#else
-#eb create MyProfileAppEBS --vpc.publicip --vpc.elbpublic --instance_profile iam-ebs-role --instance-types t2.micro --enable-spot  --vpc.id vpc-011aed36112c9889e --vpc.ec2subnets subnet-0a83820bfcd09082e --vpc.elbsubnets subnet-08f62229703fb2168,subnet-0a83820bfcd09082e --vpc.securitygroups sg-074f3dd3d21cab7d9
-#fi
-'''
-             }
         }
     }
     post {
