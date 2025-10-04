@@ -10,6 +10,7 @@ import com.shyampatel.myprofileapp.model.MessageRequest;
 import com.shyampatel.myprofileapp.visitor.Visit;
 import com.shyampatel.myprofileapp.visitor.VisitService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,7 +81,7 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String showForm(Model theModel, HttpServletRequest request) {
+    public String showForm(Model theModel, HttpServletRequest request, HttpSession session) {
 
         // create a student object
         MessageRequest theMessageRequest = new MessageRequest();
@@ -89,14 +90,30 @@ public class MainController {
         theModel.addAttribute("message", theMessageRequest);
         theModel.addAttribute("siteRecaptchaKey", siteRecaptchaKey);
 
+        // tracking visits
+        Integer visitCount = (Integer) session.getAttribute("visitCount");
         String visitorAddress;
         if (request.getHeader("X-FORWARDED-FOR") == null) visitorAddress = request.getRemoteAddr();
         else visitorAddress = request.getHeader("X-FORWARDED-FOR");
         String userAgent = request.getHeader("User-Agent"); // Get User-Agent header
 
-        var visited = visitService.getVisitWithTimeGreaterThan(visitorAddress, Instant.now().minus(5, ChronoUnit.MINUTES));
+        var visited = visitService.getVisitWithTimeGreaterThan(visitorAddress, Instant.now().minus(1, ChronoUnit.MINUTES));
         if (visited.isEmpty()) {
-            visitService.save(new Visit.Builder().setVisitTime(Instant.now()).setVisitorAddress(visitorAddress).setUserAgent(userAgent).build());
+            if (visitCount == null) {
+                visitCount = 1;
+            } else {
+                visitCount++;
+            }
+            session.setAttribute("visitCount", visitCount);
+            session.setMaxInactiveInterval(-1);
+            visitService.save(
+                    new Visit.Builder()
+                            .setVisitTime(Instant.now())
+                            .setVisitorAddress(visitorAddress)
+                            .setUserAgent(userAgent)
+                            .setSessionId(session.getId())
+                            .setVisitCount(visitCount)
+                            .build());
         }
         return "index";
     }

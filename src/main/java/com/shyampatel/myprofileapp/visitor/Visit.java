@@ -21,10 +21,18 @@ public class Visit {
 
     private String userAgent;
 
-    public Visit(String visitorAddress, Instant visitTime, String userAgent) {
+    @Id
+    private String sessionId;
+
+    @Id
+    private Integer visitCount;
+
+    public Visit(String visitorAddress, Instant visitTime, String userAgent, String sessionId, Integer visitCount) {
         this.visitorAddress = visitorAddress;
         this.visitTime = visitTime;
         this.userAgent = userAgent;
+        this.sessionId = sessionId;
+        this.visitCount = visitCount;
     }
 
     public Visit() {
@@ -35,12 +43,12 @@ public class Visit {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Visit visit = (Visit) o;
-        return Objects.equals(visitorAddress, visit.visitorAddress) && Objects.equals(visitTime, visit.visitTime) && Objects.equals(userAgent, visit.userAgent);
+        return Objects.equals(visitorAddress, visit.visitorAddress) && Objects.equals(visitTime, visit.visitTime) && Objects.equals(userAgent, visit.userAgent) && Objects.equals(sessionId, visit.sessionId) && Objects.equals(visitCount, visit.visitCount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(visitorAddress, visitTime, userAgent);
+        return Objects.hash(visitorAddress, visitTime, userAgent, sessionId, visitCount);
     }
 
     public static class Builder {
@@ -48,6 +56,8 @@ public class Visit {
         private String visitorAddress;
         private Instant visitTime;
         private String userAgent;
+        private String sessionId;
+        private Integer visitCount;
 
         public Builder setVisitorAddress(String visitorAddress) {
             this.visitorAddress = visitorAddress;
@@ -63,8 +73,18 @@ public class Visit {
             return this;
         }
 
+        public Builder setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public Builder setVisitCount(Integer visitCount) {
+            this.visitCount = visitCount;
+            return this;
+        }
+
         public Visit build() {
-            return new Visit(visitorAddress, visitTime, userAgent);
+            return new Visit(visitorAddress, visitTime, userAgent, sessionId, visitCount);
         }
     }
 }

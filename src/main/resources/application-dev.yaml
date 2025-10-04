@@ -1,7 +1,7 @@
 spring:
   jpa:
-    hibernate:
+#    hibernate:
 #            comment when not in dev mode
-      ddl-auto: create
+#      ddl-auto: create
 server:
   port: 8090
