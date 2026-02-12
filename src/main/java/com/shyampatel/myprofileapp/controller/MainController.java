@@ -24,7 +24,6 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 
 @Controller
 public class MainController {
@@ -80,6 +79,26 @@ public class MainController {
         return "redirect:https://github.com/shyamkp-11/MyProfileApp";
     }
 
+    public String getClientIpAddress(HttpServletRequest request) {
+        String clientIp = request.getHeader("X-Forwarded-For");
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("X-Real-IP");
+        }
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            // Fallback to X-Forwarded-For if it has multiple IPs (comma separated)
+            clientIp = request.getHeader("X-Forwarded-For");
+            if (clientIp != null && clientIp.contains(",")) {
+                // Take the first IP in the list
+                clientIp = clientIp.split(",")[0].trim();
+            }
+        }
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            // Fallback to the direct connection IP if headers are not set or trusted
+            clientIp = request.getRemoteAddr();
+        }
+        return clientIp;
+    }
+
     @GetMapping("/")
     public String showForm(Model theModel, HttpServletRequest request, HttpSession session) {
 
@@ -92,9 +111,7 @@ public class MainController {
 
         // tracking visits
         Integer visitCount = (Integer) session.getAttribute("visitCount");
-        String visitorAddress;
-        if (request.getHeader("X-FORWARDED-FOR") == null) visitorAddress = request.getRemoteAddr();
-        else visitorAddress = request.getHeader("X-FORWARDED-FOR");
+        var visitorAddress = getClientIpAddress(request);
         String userAgent = request.getHeader("User-Agent"); // Get User-Agent header
 
         var visited = visitService.getVisitWithTimeGreaterThan(visitorAddress, Instant.now().minus(1, ChronoUnit.MINUTES));
@@ -149,26 +166,42 @@ public class MainController {
             theModel.addAttribute("recaptchaFail", Boolean.TRUE);
             return "index";
         }
-        if (bindingResult.hasErrors()) {
-            return "index";
-        } else {
+        if (!bindingResult.hasErrors()) {
+            String visitorAddress = getClientIpAddress(request);
+            var messagesCount = messageService.countMessagesFromVistorSince24Hours(visitorAddress);
+            if (messagesCount >= 3) {
+                theModel.addAttribute("tooManyMessages", Boolean.TRUE);
+                return "index";
+            }
 //            System.out.println("theMessage: " + messageRequest.toString());
             var messageToSave = Message.builder()
+                    .setVisitorAddress(visitorAddress)
                     .setMessage(messageRequest.getMessage())
                     .setSubject(messageRequest.getSubject())
                     .setVisitorName(messageRequest.getVisitorName())
                     .setVisitorEmail(messageRequest.getVisitorEmail())
                     .build();
-            messageService.save(messageToSave);
-            emailService.sendEmail(
-                    "shyamkpatel@hotmail.com",
-                    "MyProfileApp -> " + messageToSave.getVisitorName() + " -> " + messageToSave.getSubject(),
-                    "From:" + messageToSave.getVisitorEmail() + "\n" +
-                            messageToSave.getMessage()
-            );
+            sendEmail(messageToSave);
             theModel.addAttribute("messageSent", Boolean.TRUE);
-            return "index";
         }
+        return "index";
     }
-
+    private void sendEmailSES(Message messageToSave) {
+        messageService.save(messageToSave);
+        emailService.sendEmail(
+                "shyamkpatel@hotmail.com",
+                "MyProfileApp -> " + messageToSave.getVisitorName() + " -> " + messageToSave.getSubject(),
+                "From:" + messageToSave.getVisitorEmail() + "\n" +
+                        messageToSave.getMessage()
+        );
+    }
+    private void sendEmail(Message messageToSave) {
+        messageService.save(messageToSave);
+        emailService.sendEmail(
+                "shyamkpatel@hotmail.com",
+                "MyProfileApp -> " + messageToSave.getVisitorName() + " -> " + messageToSave.getSubject(),
+                "From:" + messageToSave.getVisitorEmail() + "\n" +
+                        messageToSave.getMessage()
+        );
+    }
 }

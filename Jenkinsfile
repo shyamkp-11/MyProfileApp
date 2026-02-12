@@ -113,7 +113,7 @@ fi
                 sh '''
 ls -lrt
 cat >entrypoint.sh <<EOL
-java -jar MyProfileApp.jar --spring.datasource.url=$WEBAPP_DATASOURCE_URL --spring.datasource.username=$WEBAPP_DATASOURCE_USERNAME --spring.datasource.password=$WEBAPP_DATASOURCE_PASSWORD --spring.mail.host=$SPRING_MAIL_HOST --spring.mail.password=$SPRING_MAIL_PASSWORD --spring.mail.port=$SPRING_MAIL_PORT --spring.mail.username=$SPRING_MAIL_USERNAME --RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY --RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY --server.port=$SERVER_PORT --MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS
+java -jar MyProfileApp.jar --spring.datasource.url=$WEBAPP_DATASOURCE_URL --spring.datasource.username=$WEBAPP_DATASOURCE_USERNAME --spring.datasource.password=$WEBAPP_DATASOURCE_PASSWORD --spring.mail.host=$SPRING_MAIL_HOST --spring.mail.password="$SPRING_MAIL_PASSWORD" --spring.mail.port=$SPRING_MAIL_PORT --spring.mail.username=$SPRING_MAIL_USERNAME --RECAPTCHA_SITE_KEY=$RECAPTCHA_SITE_KEY --RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY --server.port=$SERVER_PORT --MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS
 EOL
 docker image build -t shyamkp4/deployed_my_profile_app:$BUILD_NUMBER -t shyamkp4/deployed_my_profile_app:latest .
 docker images

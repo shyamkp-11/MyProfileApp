@@ -11,6 +11,8 @@ spring:
             required: true
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
+server:
+  forward-headers-strategy: native
 application:
   mail:
     from:

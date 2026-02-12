@@ -16,10 +16,12 @@ import java.time.Instant;
  */
 @Entity
 @Table(name="message")
-@Builder
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 public class Message {
+
+    @Column(name="visitor_address")
+    private String visitorAddress;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +49,14 @@ public class Message {
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private Instant createdAt;
+
+
+    public String getVisitorAddress() {
+        return visitorAddress;
+    }
+    public void setVisitorAddress(String visitorAddress) {
+        this.visitorAddress = visitorAddress;
+    }
 
     public Long getId() {
         return id;
@@ -103,8 +113,9 @@ public class Message {
     public Message() {
     }
 
-    public Message(Long id, String visitorName, String visitorEmail, String subject, String message, Instant createdAt) {
+    public Message(Long id, String visitorAddress, String visitorName, String visitorEmail, String subject, String message, Instant createdAt) {
         this.id = id;
+        this.visitorAddress = visitorAddress;
         this.visitorName = visitorName;
         this.visitorEmail = visitorEmail;
         this.subject = subject;
@@ -114,6 +125,8 @@ public class Message {
 
     public static class Builder {
         private Long id;
+
+        private String visitorAddress;
         private String visitorName;
         private String visitorEmail;
         private String subject;
@@ -122,6 +135,11 @@ public class Message {
 
         public Builder setId(Long id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder setVisitorAddress(String visitorAddress) {
+            this.visitorAddress = visitorAddress;
             return this;
         }
 
@@ -151,7 +169,7 @@ public class Message {
         }
 
         public Message build() {
-            return new Message(id, visitorName, visitorEmail, subject, message, createdAt);
+            return new Message(id, visitorAddress, visitorName, visitorEmail, subject, message, createdAt);
         }
     }
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Shyam Patel</title>
     <link rel="icon" type="image/svg+xml" href="/fevicon.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/home.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div class="fixed-top">
@@ -22,6 +22,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/status">Status</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
                     <li class="nav-item"><a class="nav-link" href="#work">Work History</a></li>
@@ -40,6 +41,12 @@
     <th:block th:if="${recaptchaFail}==true">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             Message send failed due to unsatisfied reCAPTCHA!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </th:block>
+    <th:block th:if="${tooManyMessages}==true">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Too many messages sent in 24 hours! Try later.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </th:block>
@@ -457,7 +464,8 @@
         © 2025 Shyam Patel &nbsp;|&nbsp;&nbsp;
         <a href="https://github.com/shyamkp-11" target="_blank" class="me-3">GitHub</a>|&nbsp;
         <a href="https://linkedin.com/in/patel-shyam" target="_blank" class="me-3">LinkedIn</a>|&nbsp;
-        <a href="mailto:me@devwshyam.com">Email</a>
+<!--        <a href="mailto:me@devwshyam.com">Email</a>-->
+        <a href="mailto:">Email</a>
     </div>
 </footer>
 
@@ -470,6 +478,8 @@
             document.querySelector(this.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
         });
     });
+
 </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </html>
