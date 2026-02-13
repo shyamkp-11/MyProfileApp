@@ -60,6 +60,11 @@ mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
             }
         }
         stage('Upload Github release') {
+        when {
+        	expression {
+        		return true
+                }
+            }
 			agent {
 				docker {
 					image 'shyamkp4/upload-github-release'
