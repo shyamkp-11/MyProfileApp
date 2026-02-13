@@ -60,6 +60,7 @@ mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
             }
         }
         stage('Upload Github release') {
+
 			agent {
 				docker {
 					image 'shyamkp4/upload-github-release'
@@ -68,6 +69,9 @@ mvn -Dmaven.repo.local=.m2/repository -DskipTests clean install -e
 				}
 			}
 			when {
+    			expression {
+                   return false
+                }
 				beforeAgent true;
 				expression {
 					def scriptOutput = sh(returnStdout: true, script: '''
