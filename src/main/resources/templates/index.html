@@ -15,14 +15,14 @@
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img alt="site icon" src="../images/site-icon.svg" width="38" height="38">
-                <span>d</span><span>e</span><span>v</span>.<span>W</span>.<span>S</span><span>h</span><span>y</span><span>a</span><span>m</span>
+                <span>d</span><span>e</span><span>v</span><span>.</span><span>W</span><span>.</span><span>S</span><span>h</span><span>y</span><span>a</span><span>m</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/status">Status</a></li>
+<!--                    <li class="nav-item"><a class="nav-link" href="/status">Status</a></li>-->
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
                     <li class="nav-item"><a class="nav-link" href="#work">Work History</a></li>
@@ -51,36 +51,45 @@
         </div>
     </th:block>
 </div>
+
+<!-- UPDATED HERO SECTION WITH LAYERED DIVS -->
 <header class="hero">
-    <div class=".hero-background"></div>
-    <!--    <img src="/static/images/background.png" alt="hero background image" class="hero-background"/>-->
-    <div>
-        <img src="/images/profile_pic.jpg" alt="Profile Picture" class="profile-img mb-3">
+    <!-- Layer 1: Background Image -->
+    <div class="hero-background"></div>
+
+    <!-- Layer 2: Gradient Overlay -->
+    <div class="hero-overlay"></div>
+
+    <!-- Layer 3: Floating Particles -->
+    <div class="hero-particles"></div>
+
+    <!-- Layer 4: Glow Effects -->
+    <div class="hero-glow"></div>
+
+    <!-- Layer 5: Content -->
+    <div class="hero-content">
+        <div class="profile-img-wrapper">
+            <img src="/images/profile_pic.jpg" alt="Profile Picture" class="profile-img">
+        </div>
         <h1>Hi, I'm Shyam Patel</h1>
         <p class="lead">Android | Web | Cloud Developer</p>
-        <p>
+        <p class="social-icons">
             <a href="https://www.linkedin.com/in/patel-shyam">
-                <!--            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" fill="white"-->
-                <!--                 viewBox="0 0 36 36">-->
-                <!--                <rect x="4" y="4" width="80%" height="80%"></rect>-->
-                <!--                <image id="linkedin" width="100%" height="100%"-->
-                <!--                       xlink:href="/images/ln-icon.png"/>-->
-                <!--            </svg>-->
                 <img class="social-icon" id="linkedin"
                      src="../images/ln-img.png"
-                     style="height:38px;width:auto;display:inline;"
                      alt="Linkedin icon"
                 />
             </a>
             <a href="https://github.com/shyamkp-11">
                 <img class="social-icon" id="github"
                      src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
-                     style="height:34px;width:auto;display:inline;border-radius:50%;border: 5px solid #000000;"
                      alt="Github icon"
                 />
-            </a></p>
+            </a>
+        </p>
     </div>
 </header>
+
 <section id="about" class="container py-5">
     <h2>About Me</h2>
     <div id="aboutContent">
@@ -91,7 +100,7 @@
             deliver robust, seamless
             end-to-end
             solutions.<br>
-            After a refreshing career break 🏝️, I’m ready to bring fresh energy, creativity, and a customer-focused
+            After a refreshing career break 🏝️, I'm ready to bring fresh energy, creativity, and a customer-focused
             mindset to a dynamic team ✨.
             <br><br>
             Beyond technical skills, I have strong people skills gained from working in fast-paced customer service
@@ -99,9 +108,6 @@
             of everything I build 🙂.
         </p>
     </div>
-    <!--<a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#aboutContent-collapse" role="button"
-       aria-expanded="false"
-       aria-controls="aboutContent-collapse">Read More</a>-->
 </section>
 
 <section id="skills" class="bg-light py-5">
@@ -178,14 +184,14 @@
                 my skills ⚡️. Click available :
                 <img src="../images/download.svg" height="18px" width="18px"
                      alt="download icon"/>
-                icon to <u>download mobile App</u>.
+                Icon to <u>download mobile App</u>.
                 <ol>
                     <li><h6>
-                        <a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/githubplayroom">GitHub
-                            Playroom</a>&nbsp;<a href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/githubplayroom%2Fv1.0">
-                            <img src="../images/download.svg" height="18px" width="18px"
-                                 alt="download icon github playroom app"/>
-                        </a>
+                        <a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/githubplayroom">GitHub
+                            Playroom</a>&nbsp;<a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/githubplayroom%2Fv1.0">
+                        <img src="../images/download.svg" height="18px" width="18px"
+                             alt="download icon github playroom app"/>
+                    </a>
                     </h6>
                         <ul>
                             <li>App that allows user to interact with their GitHub Account.</li>
@@ -207,11 +213,11 @@
 
                     <div id="competency-projects-collapse" class="collapse">
                         <li><h6>
-                            <a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/geofenceplayroom">The
-                                Geofence App</a>&nbsp;<a href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/geofenceplayroom%2Fv1.0">
-                                <img src="../images/download.svg" height="18px" width="18px"
-                                     alt="download icon geofence app"/>
-                            </a>
+                            <a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/geofenceplayroom">The
+                                Geofence App</a>&nbsp;<a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/geofenceplayroom%2Fv1.0">
+                            <img src="../images/download.svg" height="18px" width="18px"
+                                 alt="download icon geofence app"/>
+                        </a>
                         </h6>
                             <ul>
                                 <li>App showcases geofencing functionality on Android</li>
@@ -229,11 +235,11 @@
                             </ul>
                         </li>
                         <li><h6>
-                            <a href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/withbluetooth">WithBluetooth
-                                App</a>&nbsp;<a href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/withbluetooth%2Fv1.0">
-                                <img src="../images/download.svg" height="18px" width="18px"
-                                     alt="download icon with bluetooth app"/>
-                            </a>
+                            <a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/tree/main/withbluetooth">WithBluetooth
+                                App</a>&nbsp;<a class="link" href="https://github.com/shyamkp-11/AndroidPlayroom/releases/tag/withbluetooth%2Fv1.0">
+                            <img src="../images/download.svg" height="18px" width="18px"
+                                 alt="download icon with bluetooth app"/>
+                        </a>
                         </h6>
                             <ul>
                                 <li>App explores android BLE API by allowing it to connect to Bluetooth GATT Server on
@@ -255,7 +261,7 @@
                                     device pairing using ConnectionDeviceManager, Koin and Jetpack Navigation</i></li>
                             </ul>
                         </li>
-                        <li><h6><a href="https://github.com/shyamkp-11/The-Backend-Server-Github-Webhooks">The Backend
+                        <li><h6><a class="link" href="https://github.com/shyamkp-11/The-Backend-Server-Github-Webhooks">The Backend
                             App / GitHub Webhooks</a></h6>
                             <ul>
                                 <li>Implemented Java backend server using Spring boot framework</li>
@@ -277,7 +283,7 @@
                                 </i></li>
                             </ul>
                         </li>
-                        <li><h6><a href="https://build.devwshyam.com">CI / CD project</a></h6>
+                        <li><h6><a class="link" href="https://build.devwshyam.com">CI / CD project</a></h6>
                             <ul>
                                 <li>Built jenkins CI/CD pipelines for all Android and Spring projects.</li>
                                 <li>Setup Amazon EBS along with Docker to run spring projects</li>
@@ -287,7 +293,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><h6><a href="https://github.com/shyamkp-11/MyProfileApp">dev.W.Shyam</a></h6>
+                        <li><h6><a class="link" href="https://github.com/shyamkp-11/MyProfileApp">dev.W.Shyam</a></h6>
                             <ul>
                                 <li>Implement webapp to showcase my personal profile.</li>
                                 <li>Uses reCAPTCHA v2 to enforce bots protection on forms in the webapp</li>
@@ -297,11 +303,11 @@
                             </ul>
                         </li>
                     </div>
-                    <a class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
-                       href="#competency-projects-collapse" role="button" aria-expanded="false"
-                       aria-controls="competency-projects-collapse">5+ More!</a>
                 </ol>
             </div>
+            <a class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
+               href="#competency-projects-collapse" role="button" aria-expanded="false"
+               aria-controls="competency-projects-collapse">5+ More!</a>
         </li>
         <li class="list-group-item">
             <h5>Frontend associate - Walmart, Naperville, IL</h5>
@@ -321,7 +327,7 @@
             </div>
         </li>
         <li class="list-group-item">
-            <h5>Android Developer - <a href="https://www.linkedin.com/company/cellpointdigital/">Cellpoint Digital,
+            <h5>Android Developer - <a class="link" href="https://www.linkedin.com/company/cellpointdigital/">Cellpoint Digital,
                 Chicago, IL</a></h5>
             <p>Oct 2018 - Jan 2020</p>
             <div>
@@ -330,7 +336,7 @@
                 - Developed applications using modern software design patterns such as dependency injection and clean
                 architecture, incorporated offline storage, and threading for seamless use.<br>
                 - Implemented script to auto-generate OpenAPI client, wrote unit test with 100% coverage for the
-                business logic -in viewmodels, usecases and repositories.<br>
+                business logic - in viewmodels, usecases and repositories.<br>
                 - Implemented multiple custom views to fulfill dynamic theming requirements and speed up
                 development.<br>
                 - Developed and maintained new and existing features for the Philippine Airlines Android app.
@@ -464,22 +470,25 @@
         © 2025 Shyam Patel &nbsp;|&nbsp;&nbsp;
         <a href="https://github.com/shyamkp-11" target="_blank" class="me-3">GitHub</a>|&nbsp;
         <a href="https://linkedin.com/in/patel-shyam" target="_blank" class="me-3">LinkedIn</a>|&nbsp;
-<!--        <a href="mailto:me@devwshyam.com">Email</a>-->
-        <a href="mailto:">Email</a>
+        <a href="/cdn-cgi/l/email-protection#b8">Email</a>
     </div>
 </footer>
 
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
     // JavaScript: Smooth scroll for nav links
     document.querySelectorAll('a.nav-link').forEach(link => {
         link.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
+            const href = this.getAttribute('href');
+            // Only prevent default for anchor links, not full URLs
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                document.querySelector(href).scrollIntoView({behavior: 'smooth'});
+            }
         });
     });
-
 </script>
-</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
