@@ -1,6 +1,6 @@
 /* ============================================
-   DEVWSHYAM.COM
-   developer portfolio stylesheet
+   DEVWSHYAM.COM - ENHANCED STYLESHEET
+   A modern, refined developer portfolio
    ============================================ */
 
 /* ---------- IMPORTS ---------- */
@@ -484,6 +484,49 @@ p {
     }
 }
 
+/* Resume download button */
+.btn-resume {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.3rem 1.3rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: all var(--transition-base);
+    animation: fadeInUp 0.8s ease 0.8s forwards;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-resume:hover {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(96, 165, 250, 0.45);
+}
+
+.btn-resume:active {
+    transform: translateY(-1px);
+}
+
+.btn-resume svg {
+    transition: transform var(--transition-base);
+}
+
+.btn-resume:hover svg {
+    transform: translateY(3px);
+}
+
 /* Social icons in hero */
 .social-icons {
     animation: fadeInUp 0.8s ease 0.6s forwards;
@@ -519,6 +562,7 @@ p {
 section {
     padding: 5rem 0;
     position: relative;
+    scroll-margin-top: 70px; /* matches navbar height */
 }
 
 section.container {
@@ -590,17 +634,17 @@ section.container {
 }
 
 /* ---------- WORK HISTORY ---------- */
-#work {
+#work-history {
     background: var(--bg-card);
 }
 
-#work .list-group {
+#work-history .list-group {
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: var(--shadow-md);
 }
 
-#work .list-group-item {
+#work-history .list-group-item {
     border: none;
     border-bottom: 1px solid var(--border-subtle);
     padding: 1.75rem;
@@ -608,34 +652,34 @@ section.container {
     background: var(--bg-card);
 }
 
-#work .list-group-item:last-child {
+#work-history .list-group-item:last-child {
     border-bottom: none;
 }
 
-#work .list-group-item:hover {
+#work-history .list-group-item:hover {
     background: var(--highlight-soft);
 }
 
-#work .list-group-item h5 {
+#work-history .list-group-item h5 {
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: var(--heading-color);
 }
 
-#work .list-group-item p {
+#work-history .list-group-item p {
     color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 0.75rem;
 }
 
-#work  a.link {
+#work-history  a.link {
     color: var(--blue-deep);
     text-decoration: none;
     font-weight: 500;
     transition: color var(--transition-fast);
 }
 
-#work a.link:hover {
+#work-history a.link:hover {
     color: var(--blue);
     text-decoration: underline;
 }
