@@ -523,7 +523,7 @@
             <label for="inputMessage" class="form-label">Message</label>
             <textarea class="form-control"
                       id="inputMessage" rows="5"
-                      placeholder="Your Message" th:field="${message.message}" required maxlength="300"></textarea>
+                      placeholder="Your Message" th:field="${message.message}" required maxlength="5000"></textarea>
             <span th:if="${#fields.hasErrors('message')}"
                   th:errors="${message.message}" class="text-danger"></span>
         </div>
